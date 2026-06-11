@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Task, TaskItem } from '../service/task';
 
 @Component({
   selector: 'app-todo-list',
@@ -12,59 +13,12 @@ export class TodoList {
   selectedTask: any = null;
   selectSelectedTask: any = null;
   isSaveDisable = false;
-  tasks = [
-    {
-      id: 1,
-      name: "Learn angular",
-      difficulty: "hard",
-      completed: "false",
-      deadline: "12.06.2026"
-    },
-
-    {
-      id: 2,
-      name: "Make component",
-      difficulty: "easy",
-      completed: "false",
-      deadline: "10.06.2026"
-    },
-    {
-      id: 3,
-      name: "Binding practice",
-      difficulty: "medium",
-      completed: "false",
-      deadline: "10.06.2026"
-    },
-    {
-      id: 4,
-      name: "Make homework",
-      difficulty: "hard",
-      completed: "false",
-      deadline: "22.06.2026"
-    },
-    {
-      id: 5,
-      name: "Drink water",
-      difficulty: "easy",
-      completed: "true",
-      deadline: "10.06.2026"
-    },
-    {
-      id: 6,
-      name: "Go home",
-      difficulty: "easy",
-      completed: "false",
-      deadline: "10.06.2026"
-    }
-  ]
+  private taskService = inject(Task);
+  tasks = this.taskService.getTasks();
 
   isCompleted(task: any): boolean
   {
-    if(task.completed === "true")
-    {
-      return true;
-    }
-    return false;
+    return task.completed;
   }
   
   selectTask(task: any)
@@ -73,20 +27,46 @@ export class TodoList {
     console.log(this.selectedTask)
   }
 
-  selectSelected()
+  deleteTask(task: TaskItem)
   {
-    this.selectSelectedTask = this.selectedTask;
+    this.taskService.deleteTask(task.id);
+    this.tasks = this.taskService.getTasks();
+
+    if(this.selectedTask?.id === task.id)
+    {
+      this.selectedTask = null;
+    }
   }
 
-  changeStatus()
+  getTotalCount(): number
   {
-    if(this.selectSelectedTask.completed === "true")
+    return this.taskService.getTotalCount();
+  }
+
+  getActiveCount(): number
+  {
+    return this.taskService.getActiveCount();
+  }
+
+  getCompletedCount(): number
+  {
+    return this.taskService.getCompletedCount();
+  }
+
+  selectSelected(): void
+  {
+    if(this.selectSelectedTask)
     {
-      this.selectSelectedTask.completed = "false";
+      this.selectSelectedTask = null;
     }
     else
     {
-      this.selectSelectedTask.completed = "true";
+      this.selectSelectedTask = this.selectedTask;
     }
+  }
+
+  changeStatus(task: TaskItem)
+  {
+    this.taskService.changeStatus(task);
   }
 }
