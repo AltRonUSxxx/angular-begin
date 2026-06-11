@@ -38,6 +38,11 @@ export class TodoList {
     }
   }
 
+  getHardTasksCount(): number
+  {
+    return this.taskService.getHardsTasksCount();
+  }
+
   getTotalCount(): number
   {
     return this.taskService.getTotalCount();

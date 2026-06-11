@@ -85,6 +85,11 @@ export class Task
     this.tasks = this.tasks.filter(task => task.id !== id );
   }
 
+  getHardsTasksCount(): number
+  {
+    return this.tasks.filter(x => x.difficulty.toLocaleLowerCase() === "hard").length;
+  }
+
   getTasks(): TaskItem[]
   {
     return this.tasks

@@ -2,6 +2,7 @@
     <h2>{{title}}</h2>
 
     <ul>
+        <p>Hard tasks count: {{getHardTasksCount()}}</p>
         @for (task of tasks; track task)
         {
             <li class="rounded-3 shadow mb-3" (click)="selectTask(task)" [class.completed]="task.completed" [class.selected]="task===selectedTask"> {{task.id}}. {{task.name}}
